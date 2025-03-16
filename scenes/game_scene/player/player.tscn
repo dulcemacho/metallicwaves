@@ -1,0 +1,80 @@
+[gd_scene load_steps=15 format=3 uid="uid://dbbj3s142t42c"]
+
+[ext_resource type="Script" uid="uid://ckxgjlcvak21x" path="res://scenes/game_scene/player/player.gd" id="1_7k1jl"]
+[ext_resource type="Script" uid="uid://cuarlankegujd" path="res://scenes/game_scene/player/controller/input_collector.gd" id="1_coy0a"]
+[ext_resource type="PackedScene" uid="uid://nl3x1snanemy" path="res://scenes/game_scene/player/camera/player_camera.tscn" id="2_tcwrj"]
+[ext_resource type="Script" uid="uid://ex31e8t5t2pe" path="res://scenes/game_scene/player/model/character_model.gd" id="3_kyjql"]
+[ext_resource type="Script" uid="uid://cw1sfvkydo8b7" path="res://scenes/game_scene/player/moves/move_set.gd" id="4_7p8hl"]
+[ext_resource type="Script" uid="uid://br2n7ulk551ky" path="res://scenes/game_scene/player/moves/run.gd" id="5_4yb8v"]
+[ext_resource type="Script" uid="uid://od2h1ldjlad1" path="res://scenes/game_scene/player/model/character_resources.gd" id="5_csdy4"]
+[ext_resource type="Script" uid="uid://duwkx5e8gw0us" path="res://scenes/game_scene/player/moves/idle.gd" id="6_0b0jg"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_81blf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7k1jl"]
+albedo_color = Color(0, 1, 1, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_81blf"]
+material = SubResource("StandardMaterial3D_7k1jl")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kyjql"]
+albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7k1jl"]
+material = SubResource("StandardMaterial3D_kyjql")
+size = Vector3(0.4, 0.2, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tcwrj"]
+albedo_color = Color(1, 0.258824, 0.27451, 1)
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_7k1jl")
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_81blf")
+
+[node name="Controller" type="Node" parent="."]
+script = ExtResource("1_coy0a")
+
+[node name="Model" type="Node3D" parent="."]
+script = ExtResource("3_kyjql")
+
+[node name="Moves" type="Node" parent="Model" node_paths=PackedStringArray("character", "resources")]
+script = ExtResource("4_7p8hl")
+character = NodePath("../..")
+resources = NodePath("../Resources")
+
+[node name="Run" type="Node" parent="Model/Moves"]
+script = ExtResource("5_4yb8v")
+label = "run"
+priority = 2
+tracks_vector = true
+tracking_angular_speed = 15.0
+
+[node name="Idle" type="Node" parent="Model/Moves"]
+script = ExtResource("6_0b0jg")
+label = "idle"
+priority = 1
+
+[node name="Resources" type="Node" parent="Model"]
+script = ExtResource("5_csdy4")
+
+[node name="View" type="Node3D" parent="."]
+
+[node name="Placeholder" type="MeshInstance3D" parent="View"]
+mesh = SubResource("CapsuleMesh_81blf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="View"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.582462, -0.454377)
+mesh = SubResource("BoxMesh_7k1jl")
+
+[node name="PlayerCamera" parent="." node_paths=PackedStringArray("look_at") instance=ExtResource("2_tcwrj")]
+look_at = NodePath("../CameraFocus")
+
+[node name="CameraFocus" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.33, 0)
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="CameraFocus"]
+visible = false
+radius = 0.75
+material = SubResource("StandardMaterial3D_tcwrj")

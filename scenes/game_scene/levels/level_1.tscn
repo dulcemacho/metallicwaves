@@ -1,78 +1,38 @@
-[gd_scene load_steps=4 format=3 uid="uid://fe8t8jd103t4"]
+[gd_scene load_steps=6 format=3 uid="uid://dsik1utid8emp"]
 
-[ext_resource type="Script" uid="uid://d1ycgq66hhqwm" path="res://scenes/game_scene/levels/level.gd" id="1_y0mvw"]
-[ext_resource type="Script" uid="uid://1nf36h0gms3q" path="res://addons/maaacks_game_template/base/scripts/capture_focus.gd" id="2_w6i3l"]
-[ext_resource type="Script" uid="uid://dm56welw406is" path="res://scenes/game_scene/input_display_label.gd" id="3_623lg"]
+[ext_resource type="PackedScene" uid="uid://dbbj3s142t42c" path="res://scenes/game_scene/player/player.tscn" id="1_0nr2a"]
 
-[node name="Level1" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("1_y0mvw")
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0nr2a"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
 
-[node name="BackgroundColor" type="ColorRect" parent="."]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
+[sub_resource type="Sky" id="Sky_2hhcp"]
+sky_material = SubResource("ProceduralSkyMaterial_0nr2a")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 32
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 32
+[sub_resource type="Environment" id="Environment_y0mvw"]
+background_mode = 2
+sky = SubResource("Sky_2hhcp")
+tonemap_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 16
+[sub_resource type="PlaneMesh" id="PlaneMesh_0nr2a"]
+size = Vector2(100, 100)
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 32
-script = ExtResource("2_w6i3l")
+[node name="Level1" type="Node3D"]
 
-[node name="LoseButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Lose"
+[node name="protolevel" type="Node" parent="."]
 
-[node name="WinButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Win"
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="protolevel"]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
+[node name="WorldEnvironment" type="WorldEnvironment" parent="protolevel"]
+environment = SubResource("Environment_y0mvw")
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "Change Level State: "
+[node name="MeshInstance3D" type="MeshInstance3D" parent="protolevel"]
+mesh = SubResource("PlaneMesh_0nr2a")
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Change Color"
+[node name="Camera3D" type="Camera3D" parent="protolevel"]
+transform = Transform3D(1, 0, 0, 0, 0.0791724, 0.996861, 0, -0.996861, 0.0791724, 0.0288057, 40.8384, 0.0531664)
 
-[node name="InputDisplayLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 3
-horizontal_alignment = 1
-script = ExtResource("3_623lg")
-
-[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/LoseButton" to="." method="_on_lose_button_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/WinButton" to="." method="_on_win_button_pressed"]
-[connection signal="color_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/ColorPickerButton" to="." method="_on_color_picker_button_color_changed"]
+[node name="Player" parent="." instance=ExtResource("1_0nr2a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
