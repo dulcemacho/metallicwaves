@@ -12,8 +12,6 @@ func _ready():
 
 
 func update(input : InputPackage, delta : float):
-	#print_debug(current_move.label, " character model update")
-
 	var relevance = current_move.check_relevance(input)
 	if relevance != "okay":
 		switch_to(relevance)

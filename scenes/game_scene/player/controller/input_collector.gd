@@ -28,8 +28,8 @@ func collect_inputs() -> InputPackage:
 	new_input.direction = Input.get_vector("left", "right", "forward", "backward")
 	if new_input.direction != Vector2.ZERO:
 		new_input.actions.append("run")
-		#if Input.is_action_pressed("sprint"):
-			#new_input.actions.append("sprint")
+		if Input.is_action_pressed("sprint"):
+			new_input.actions.append("sprint")
 			
 	if Input.is_action_pressed("jump"):
 		new_input.actions.append("jump")

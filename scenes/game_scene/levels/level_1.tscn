@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dsik1utid8emp"]
+[gd_scene load_steps=7 format=3 uid="uid://dsik1utid8emp"]
 
 [ext_resource type="PackedScene" uid="uid://dbbj3s142t42c" path="res://scenes/game_scene/player/player.tscn" id="1_0nr2a"]
+[ext_resource type="Texture2D" uid="uid://bm5maqkvuuq3c" path="res://addons/kenney_prototype_textures/orange/texture_09.png" id="1_2hhcp"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0nr2a"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -14,8 +15,9 @@ background_mode = 2
 sky = SubResource("Sky_2hhcp")
 tonemap_mode = 2
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_0nr2a"]
-size = Vector2(100, 100)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0nr2a"]
+albedo_texture = ExtResource("1_2hhcp")
+uv1_triplanar = true
 
 [node name="Level1" type="Node3D"]
 
@@ -28,8 +30,12 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="protolevel"]
 environment = SubResource("Environment_y0mvw")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="protolevel"]
-mesh = SubResource("PlaneMesh_0nr2a")
+[node name="CSGBox3D" type="CSGBox3D" parent="protolevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+collision_layer = 3
+size = Vector3(100, 1, 100)
+material = SubResource("StandardMaterial3D_0nr2a")
 
 [node name="Camera3D" type="Camera3D" parent="protolevel"]
 transform = Transform3D(1, 0, 0, 0, 0.0791724, 0.996861, 0, -0.996861, 0.0791724, 0.0288057, 40.8384, 0.0531664)

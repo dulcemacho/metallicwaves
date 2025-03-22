@@ -26,7 +26,9 @@ func update(_input : InputPackage, _delta : float):
 	pass
 	
 func process_input_vector(input : InputPackage, delta : float):
-	var input_direction = (character.camera.get_node("PlayCamera").basis * Vector3(input.direction.x, 0, input.direction.y)).normalized()
+	var viewport_basis = character.camera.get_node("PlayCamera").basis
+	viewport_basis.z = viewport_basis.z * Vector3(1.0, 0.0, 1.0)
+	var input_direction = ( viewport_basis * Vector3(input.direction.x, 0, input.direction.y)).normalized()
 	var face_direction = -character.basis.z
 	var angle = face_direction.signed_angle_to(input_direction, Vector3.UP)
 	character.rotate_y(clamp(angle, -tracking_angular_speed * delta, tracking_angular_speed * delta))
