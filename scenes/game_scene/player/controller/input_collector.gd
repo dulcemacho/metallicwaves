@@ -30,10 +30,13 @@ func collect_inputs() -> InputPackage:
 		new_input.actions.append("run")
 		if Input.is_action_pressed("sprint"):
 			new_input.actions.append("sprint")
+		if Input.is_action_just_pressed("dash"):
+			new_input.actions.append("dash")
 			
 	if Input.is_action_pressed("jump"):
 		new_input.actions.append("jump")
 		
 
+		
 	return new_input
 	

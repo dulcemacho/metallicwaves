@@ -56,7 +56,7 @@ func on_enter_state():
 
 func default_lifecycle(input : InputPackage):
 	if works_longer_than(DURATION):
-		return best_input_that_can_be_paid(input)
+		return top_affordable_input(input)
 	return "okay"
 
 func get_progress() -> float:
@@ -71,10 +71,10 @@ func works_longer_than(time : float) -> bool:
 func update_resources(delta : float):
 	resources.update(delta)
 
-func best_input_that_can_be_paid(input : InputPackage) -> String:
+func top_affordable_input(input : InputPackage) -> String:
 	input.actions.sort_custom(move_set.moves_priority_sort)
 	for action in input.actions:
-		if resources.can_be_paid(move_set.move[action]):
+		if resources.is_affordable(move_set.move[action]):
 			if move_set.move[action] == self:
 				return "okay"
 			else:
@@ -83,3 +83,6 @@ func best_input_that_can_be_paid(input : InputPackage) -> String:
 	
 func tracks_input_vector():
 	return tracks_vector
+
+func get_root_position_delta(delta_time : float) -> Vector3:
+	return move_set.moves_repo.get_root_delta_pos(db_label, get_progress(), delta_time)

@@ -8,6 +8,7 @@ extends CharacterBody3D
 @onready var camera_focus: Node3D = $CameraFocus
 
 const SPEED = 1.0
+var input_data : InputPackage = InputPackage.new()
 
 func _ready() -> void:
 	camera.camera.make_current()
@@ -20,4 +21,5 @@ func _physics_process(delta: float) -> void:
 	camera.input_mouse_movement(camera_motion.x, camera_motion.y)
 	
 	model.update(input, delta)
-	input.queue_free()
+	input_data.queue_free()
+	input_data = input

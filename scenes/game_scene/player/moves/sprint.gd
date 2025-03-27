@@ -10,7 +10,7 @@ func default_lifecycle(input : InputPackage):
 	if not character.is_on_floor():
 		return "midair" 
 	
-	return best_input_that_can_be_paid(input)
+	return top_affordable_input(input)
 
 func process_input_vector(input : InputPackage, delta : float):
 	var viewport_basis = character.camera.get_node("PlayCamera").basis

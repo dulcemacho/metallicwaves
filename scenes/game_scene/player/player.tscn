@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dbbj3s142t42c"]
+[gd_scene load_steps=27 format=3 uid="uid://dbbj3s142t42c"]
 
 [ext_resource type="Script" uid="uid://ckxgjlcvak21x" path="res://scenes/game_scene/player/player.gd" id="1_7k1jl"]
 [ext_resource type="Script" uid="uid://cuarlankegujd" path="res://scenes/game_scene/player/controller/input_collector.gd" id="1_coy0a"]
@@ -14,6 +14,8 @@
 [ext_resource type="Script" uid="uid://dj6ya0bg1fs0a" path="res://scenes/game_scene/player/model/down_cast.gd" id="11_sl3pm"]
 [ext_resource type="Script" uid="uid://cwd4qdh28ocgr" path="res://scenes/game_scene/player/moves/sprint.gd" id="12_30cjq"]
 [ext_resource type="Script" uid="uid://6jcldytn2cln" path="res://scenes/game_scene/player/moves/dash.gd" id="13_hh48r"]
+[ext_resource type="Script" uid="uid://lpkqwml37crc" path="res://scenes/game_scene/player/model/moves_db.gd" id="14_7wmiw"]
+[ext_resource type="Script" uid="uid://oc17elm4oqc0" path="res://scenes/game_scene/player/model/moves_repo.gd" id="14_k8sqn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_81blf"]
 
@@ -38,6 +40,27 @@ albedo_color = Color(0.397397, 0.500437, 1, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sl3pm"]
 albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="Animation" id="Animation_k8sqn"]
+resource_name = "dash"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MovesDB:transitions_to_queued")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3uubs"]
+_data = {
+&"dash": SubResource("Animation_k8sqn")
+}
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_7k1jl")
@@ -68,6 +91,18 @@ mesh = SubResource("CapsuleMesh_81blf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.582462, -0.454377)
 mesh = SubResource("BoxMesh_7k1jl")
 
+[node name="ResourcesUI" type="Control" parent="View"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="DashCharge" type="ProgressBar" parent="View/ResourcesUI"]
+layout_mode = 0
+offset_right = 4.0
+offset_bottom = 27.0
+show_percentage = false
+
 [node name="Model" type="Node3D" parent="."]
 script = ExtResource("3_kyjql")
 
@@ -85,10 +120,21 @@ material = SubResource("StandardMaterial3D_30cjq")
 radius = 0.2
 material = SubResource("StandardMaterial3D_sl3pm")
 
-[node name="Moves" type="Node" parent="Model" node_paths=PackedStringArray("character", "resources")]
+[node name="MovesRepo" type="Node" parent="Model" node_paths=PackedStringArray("db")]
+script = ExtResource("14_k8sqn")
+db = NodePath("MovesDB")
+
+[node name="MovesDB" type="AnimationPlayer" parent="Model/MovesRepo"]
+libraries = {
+&"": SubResource("AnimationLibrary_3uubs")
+}
+script = ExtResource("14_7wmiw")
+
+[node name="Moves" type="Node" parent="Model" node_paths=PackedStringArray("character", "resources", "moves_repo")]
 script = ExtResource("4_7p8hl")
 character = NodePath("../..")
 resources = NodePath("../Resources")
+moves_repo = NodePath("../MovesRepo")
 
 [node name="Run" type="Node" parent="Model/Moves"]
 script = ExtResource("5_4yb8v")
@@ -130,6 +176,9 @@ tracks_vector = true
 
 [node name="Dash" type="Node" parent="Model/Moves"]
 script = ExtResource("13_hh48r")
+label = "dash"
+db_label = "dash"
+priority = 10
 
 [node name="Resources" type="Node" parent="Model"]
 script = ExtResource("5_csdy4")

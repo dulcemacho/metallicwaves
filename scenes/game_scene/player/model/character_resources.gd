@@ -12,6 +12,7 @@ class_name CharacterResources
 
 @onready var model = $".." as CharacterModel
 
+var dash_charges : float = 3.0
 var statuses : Array[String]
 const FATIQUE_TRESHOLD = 20
 
@@ -23,19 +24,7 @@ func update(delta : float):
 func pay_resource_cost(move : Move):
 	lose_stamina(move.stamina_cost)
 
-
-#func pay_block_cost(damage : float, blocking_coefficient : float):
-	#if damage * blocking_coefficient <= stamina:
-		#lose_stamina(damage * blocking_coefficient)
-	#else:
-		#var unblocked_portion = damage - stamina / blocking_coefficient
-		#lose_stamina(stamina)
-		#lose_health(unblocked_portion)
-		## do some punishing shit like force guardbreak or smth
-		#print("was guardbroken")
-
-
-func can_be_paid(move : Move) -> bool:
+func is_affordable(move : Move) -> bool:
 	if stamina > 0 or move.stamina_cost == 0:
 		return true
 	return false
@@ -60,7 +49,6 @@ func lose_stamina(amount : float):
 		if stamina < 1:
 			statuses.append("fatique")
 
-
 func gain_stamina(amount : float):
 	if stamina + amount < max_stamina:
 		stamina += amount
@@ -68,3 +56,11 @@ func gain_stamina(amount : float):
 		stamina = max_stamina
 	if stamina > FATIQUE_TRESHOLD:
 		statuses.erase("fatique")
+
+func lose_dash_charge():
+	if not god_mode and dash_charges > 0.0:
+		dash_charges -= 1.0
+
+func gain_dash_charge():
+	if dash_charges + 0.1 < 3.0:
+		dash_charges += 0.1

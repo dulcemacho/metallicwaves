@@ -3,12 +3,12 @@ class_name MoveSet
 
 @export var character : CharacterBody3D
 @export var resources : CharacterResources
+@export var moves_repo : MovesRepository
 #@export var base_animator : AnimationPlayer
 #@export var animator : SplitBodyAnimator
 #@export var skeleton : Skeleton3D
 #@export var combat : HumanoidCombat
 #@export var area_awareness : AreaAwareness
-#@export var moves_data_repo : MovesDataRepository
 #@export var legs : Legs
 #@export var left_wrist : BoneAttachment3D
 
@@ -21,12 +21,13 @@ func accept_moves():
 			child.character = character
 			child.move_set = self
 			child.resources = resources
+			if child.db_label != "":
+				child.DURATION = moves_repo.get_duration(child.db_label)
 			#child.animator = animator
 			#child.skeleton = skeleton
 #			child.base_animator = base_animator
 			#child.combat = combat
 			#child.moves_data_repo = moves_data_repo
-			#child.DURATION = moves_data_repo.get_duration(child.backend_animation)
 			#child.area_awareness = area_awareness
 			#child.legs = legs
 			#child.left_wrist = left_wrist

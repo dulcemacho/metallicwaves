@@ -11,7 +11,7 @@ const TRANSITION_TIMING = 0.2
 func default_lifecycle(input : InputPackage):
 	character.get_quaternion()
 	if works_longer_than(TRANSITION_TIMING):
-		var result : String = best_input_that_can_be_paid(input)
+		var result : String = top_affordable_input(input)
 		return result
 	return "okay"
 
